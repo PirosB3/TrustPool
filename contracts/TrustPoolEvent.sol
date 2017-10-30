@@ -41,19 +41,14 @@ contract TrustPoolEvent {
     return states[attendee].isRegistered;
   }
 
-  function addAttendee() public returns (bool) {
-    if (msg.value < depositAmount) {
-      throw;
-    }
+  function addAttendee() payable {
+    require(msg.value >= depositAmount);
 
-    //Has user already registered
-    if (states[msg.sender].isRegistered) {
-      throw;
-    }
+    //Ensure that the attendee is not yet registered
+    require(!states[msg.sender].isRegistered);
 
     states[msg.sender].isRegistered = true;
     states[msg.sender].state = AttendeeState.PAID;
-    return true;
   }
 
 }
