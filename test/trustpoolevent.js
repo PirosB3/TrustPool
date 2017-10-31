@@ -29,12 +29,12 @@ contract('TrustPoolEvent', function(accounts) {
 
     //When
     await tpEvent.addAttendee.sendTransaction({
-      from: accounts[0],
+      from: accounts[1],
       value: 100
     });
 
     //Then
-    let isRegistered = await tpEvent.isAttendeeRegistered.call(accounts[0]);
+    let isRegistered = await tpEvent.isAttendeeRegistered.call(accounts[1]);
     assert.isTrue(isRegistered);
   });
 
@@ -44,12 +44,12 @@ contract('TrustPoolEvent', function(accounts) {
 
     //When
     await tpEvent.addAttendee.sendTransaction({
-      from: accounts[0],
+      from: accounts[1],
       value: 100
     });
 
     //Then
-    let attended = await tpEvent.didAttend.call(accounts[0]);
+    let attended = await tpEvent.didAttend.call(accounts[1]);
     assert.equal(false, attended);
   });
 
@@ -57,18 +57,18 @@ contract('TrustPoolEvent', function(accounts) {
     //Given
     let tpEvent = await TrustPoolEvent.new(100, 1509230905);
     await tpEvent.addAttendee.sendTransaction({
-      from: accounts[0],
+      from: accounts[1],
       value: 100
     });
 
     //When
     let organizerAddress = await tpEvent.getOrganizer.call();
-    await tpEvent.checkInAttendee(accounts[0], {
+    await tpEvent.checkInAttendee(accounts[1], {
       from: organizerAddress
     });
 
     //Then
-    let attended = await tpEvent.didAttend.call(accounts[0]);
+    let attended = await tpEvent.didAttend.call(accounts[1]);
     assert.equal(true, attended);
   });
 });

@@ -51,6 +51,7 @@ contract TrustPoolEvent {
 
   function addAttendee() payable {
     require(msg.value >= depositAmount);
+    require(msg.sender != organizer);
 
     //Ensure that the attendee is not yet registered
     require(!states[msg.sender].isRegistered);
@@ -61,6 +62,7 @@ contract TrustPoolEvent {
 
   function checkInAttendee(address attendee) public returns (bool) {
     require(msg.sender == organizer);
+    require(states[msg.sender].state == AttendeeState.PAID);
 
     states[attendee].state = AttendeeState.ATTENDED;
     return true;
