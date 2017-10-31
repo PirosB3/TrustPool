@@ -33,12 +33,20 @@ contract TrustPoolEvent {
     organizer = msg.sender;
   }
 
+  function getOrganizer() public returns (address) {
+    return organizer;
+  }
+
   function getDepositAmount() public returns (uint) {
     return depositAmount;
   } 
 
   function isAttendeeRegistered(address attendee) public returns (bool) {
     return states[attendee].isRegistered;
+  }
+
+  function didAttend(address attendee) public returns (bool) {
+    return states[attendee].state == AttendeeState.ATTENDED;
   }
 
   function addAttendee() payable {
@@ -50,5 +58,17 @@ contract TrustPoolEvent {
     states[msg.sender].isRegistered = true;
     states[msg.sender].state = AttendeeState.PAID;
   }
+
+  function checkInAttendee(address attendee) public returns (bool) {
+    require(msg.sender == organizer);
+
+    states[attendee].state = AttendeeState.ATTENDED;
+    return true;
+  }
+
+  //Remaining functions
+  // - checkInAttendee
+  // - checkInAttendees (in bulk)
+  // - payout
 
 }
