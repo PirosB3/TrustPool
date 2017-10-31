@@ -1,6 +1,17 @@
 var TrustPoolEvent = artifacts.require("./TrustPoolEvent.sol");
 
 contract('TrustPoolEvent', function(accounts) {
+  it("should init deposit amount", async function () {
+    //Given
+    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+
+    //When
+    let depositAmount = await tpEvent.getDepositAmount.call();
+
+    //Then
+    assert.equal(100, depositAmount);
+  });
+
   it('should mark attendees as not registered by default', async function () {
     //Given
     let tpEvent = await TrustPoolEvent.new(100, 1509230905);
@@ -25,17 +36,6 @@ contract('TrustPoolEvent', function(accounts) {
     //Then
     let isRegistered = await tpEvent.isAttendeeRegistered.call(accounts[0]);
     assert.isTrue(isRegistered);
-  });
-
-  it("should init deposit amount", async function () {
-    //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
-
-    //When
-    let depositAmount = await tpEvent.getDepositAmount.call();
-
-    //Then
-    assert.equal(100, depositAmount);
   });
 
   it('should initally mark attendees as PAID, !ATTENDED', async function () {
