@@ -1,17 +1,7 @@
 pragma solidity ^0.4.4;
 
 contract TrustPoolEvent {
-  //Need
-  // Organizer Address
-  // Fee
-  // Map of Attendee to State
-  // Payout Time (in block timestamp)
   //NOTE: no way for Organizer to make money for now
-
-  //For the State
-  // 0 - Paid
-  // 1 - Attended
-
   //Implicit - not keeping track of whether the contract has been "drained"
 
   struct Attendee {
