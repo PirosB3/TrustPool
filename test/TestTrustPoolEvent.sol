@@ -15,7 +15,7 @@ contract TestTrustPoolEvent{
 
     uint expected = 123 ether;
 
-    Assert.equal(tpEvent.getDepositAmount(), expected, "The deposit amount should be initialized");
+    Assert.equal(tpEvent.depositAmount(), expected, "The deposit amount should be initialized");
   }
 
   function testAttendeeIsNotRegisteredByDefault() {

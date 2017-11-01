@@ -21,10 +21,13 @@ contract TrustPoolEvent {
 
   enum AttendeeState { PAID, ATTENDED }
   
-  address organizer;
+  address public organizer;
   uint public depositAmount;
   uint public payoutTime;
   mapping (address => Attendee) states;
+  mapping (uint => address) attendeeIndex;
+  uint public numRegistered = 0;
+  uint public numAttended = 0;
 
 
   function TrustPoolEvent(uint _depositAmount, uint _payoutTime) {
@@ -32,14 +35,6 @@ contract TrustPoolEvent {
     payoutTime = _payoutTime;
     organizer = msg.sender;
   }
-
-  function getOrganizer() public returns (address) {
-    return organizer;
-  }
-
-  function getDepositAmount() public returns (uint) {
-    return depositAmount;
-  } 
 
   function isAttendeeRegistered(address attendee) public returns (bool) {
     return states[attendee].isRegistered;
@@ -58,6 +53,8 @@ contract TrustPoolEvent {
 
     states[msg.sender].isRegistered = true;
     states[msg.sender].state = AttendeeState.PAID;
+    attendeeIndex[numRegistered] = msg.sender;
+    numRegistered++;
   }
 
   function checkInAttendee(address attendee) public returns (bool) {
@@ -65,12 +62,22 @@ contract TrustPoolEvent {
     require(states[msg.sender].state == AttendeeState.PAID);
 
     states[attendee].state = AttendeeState.ATTENDED;
+    numAttended++;
     return true;
   }
 
-  //Remaining functions
-  // - checkInAttendee
-  // - checkInAttendees (in bulk)
-  // - payout
+  function triggerPayout() public returns (bool) {
+    require(now > payoutTime);
+    require(msg.sender == organizer);
+
+    uint payoutAmt = this.balance / numAttended;
+    for (uint i = 0; i < numRegistered; i++) {
+      address attendee = attendeeIndex[i];
+      if (states[attendee].state == AttendeeState.ATTENDED) {
+        attendee.send(payoutAmt);
+      }
+    }
+    return true;
+  }
 
 }
