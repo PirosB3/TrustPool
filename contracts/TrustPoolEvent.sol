@@ -44,7 +44,7 @@ contract TrustPoolEvent {
     return states[attendee].state == AttendeeState.ATTENDED;
   }
 
-  function addAttendee() payable {
+  function addAttendee() public payable {
     require(msg.value >= depositAmount);
     require(msg.sender != organizer);
 
@@ -74,7 +74,7 @@ contract TrustPoolEvent {
     for (uint i = 0; i < numRegistered; i++) {
       address attendee = attendeeIndex[i];
       if (states[attendee].state == AttendeeState.ATTENDED) {
-        attendee.send(payoutAmt);
+        attendee.transfer(payoutAmt);
       }
     }
     return true;
