@@ -1,2 +1,4 @@
 *.swp
 build
+dist
+node_modules
