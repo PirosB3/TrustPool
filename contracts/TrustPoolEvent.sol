@@ -31,7 +31,8 @@ contract TrustPoolEvent {
   }
 
   function didAttend(address attendee) public returns (bool) {
-    return states[attendee].state == AttendeeState.ATTENDED;
+    return states[attendee].isRegistered
+      && states[attendee].state == AttendeeState.ATTENDED;
   }
 
   function addAttendee() public payable {
