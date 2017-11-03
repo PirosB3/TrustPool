@@ -1,7 +1,7 @@
 const path = require('path');
 
 const config = {
-  entry: './index.js',
+  entry: './frontend/main.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
@@ -9,12 +9,12 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/env']
+            presets: ['env', 'react']
           }
         }
       }
