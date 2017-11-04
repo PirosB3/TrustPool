@@ -1,9 +1,9 @@
-var TrustPoolEvent = artifacts.require("./TrustPoolEvent.sol");
+const TrustPoolEvent = artifacts.require("./TrustPoolEvent.sol");
 
 contract('TrustPoolEvent', function(accounts) {
   it("should init deposit amount", async function () {
     //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+    let tpEvent = await TrustPoolEvent.new(100, 0, false);
 
     //When
     let depositAmount = await tpEvent.depositAmount.call();
@@ -14,7 +14,7 @@ contract('TrustPoolEvent', function(accounts) {
 
   it('should mark attendees as not registered by default', async function () {
     //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+    let tpEvent = await TrustPoolEvent.new(100, 0, false);
 
     //When
     let isRegistered = await tpEvent.isAttendeeRegistered.call(accounts[0]);
@@ -25,7 +25,7 @@ contract('TrustPoolEvent', function(accounts) {
 
   it("should allow new attendees to register", async function () {
     //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+    let tpEvent = await TrustPoolEvent.new(100, 0, false);
 
     //When
     await tpEvent.addAttendee.sendTransaction({
@@ -38,9 +38,24 @@ contract('TrustPoolEvent', function(accounts) {
     assert.isTrue(isRegistered);
   });
 
+  it("should not allow registration after cutoff", async function () {
+    //Given
+    let tpEvent = await TrustPoolEvent.new(100, 0, true);
+
+    //When
+    await tpEvent.addAttendee.sendTransaction({
+      from: accounts[1],
+      value: 100
+    }).then(success => {
+      assert.fail("This transaction is expected to fail!");
+    }, error => {
+      /* do nothing, this is expected! */
+    });
+  });
+
   it('should initally mark attendees as PAID, !ATTENDED', async function () {
     //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+    let tpEvent = await TrustPoolEvent.new(100, 0, false);
 
     //When
     await tpEvent.addAttendee.sendTransaction({
@@ -55,7 +70,7 @@ contract('TrustPoolEvent', function(accounts) {
 
   it('should allow the organizer to check in attendees', async function () {
     //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+    let tpEvent = await TrustPoolEvent.new(100, 0, false);
     await tpEvent.addAttendee.sendTransaction({
       from: accounts[1],
       value: 100
@@ -75,7 +90,7 @@ contract('TrustPoolEvent', function(accounts) {
 
   it('should allow the organizer to trigger payout', async function () {
     //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+    let tpEvent = await TrustPoolEvent.new(100, 0, false);
     let organizerAddress = await tpEvent.organizer.call();
 
     await tpEvent.addAttendee.sendTransaction({
@@ -101,7 +116,7 @@ contract('TrustPoolEvent', function(accounts) {
 
   it('should only payout attendees who attended', async function () {
     //Given
-    let tpEvent = await TrustPoolEvent.new(100, 1509230905);
+    let tpEvent = await TrustPoolEvent.new(100, 0, false);
     let organizerAddress = await tpEvent.organizer.call();
 
     await tpEvent.addAttendee.sendTransaction({

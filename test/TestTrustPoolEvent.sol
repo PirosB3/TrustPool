@@ -10,7 +10,8 @@ contract TestTrustPoolEvent{
     
     TrustPoolEvent tpEvent = new TrustPoolEvent(
       123 ether,
-      1509230905
+      1509230905,
+      false
     );
 
     uint expected = 123 ether;
@@ -21,7 +22,8 @@ contract TestTrustPoolEvent{
   function testAttendeeIsNotRegisteredByDefault() {
     TrustPoolEvent tpEvent = new TrustPoolEvent(
       123 ether,
-      1509230905
+      1509230905,
+      false
     );
 
     Assert.isFalse(tpEvent.isAttendeeRegistered(msg.sender), "The user has not been registered");

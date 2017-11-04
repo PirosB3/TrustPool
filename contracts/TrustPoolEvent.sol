@@ -14,15 +14,20 @@ contract TrustPoolEvent {
   address public organizer;
   uint public depositAmount;
   uint public payoutTime;
+  bool usePayoutTime;
   mapping (address => Attendee) states;
   mapping (uint => address) attendeeIndex;
   uint public numRegistered = 0;
   uint public numAttended = 0;
 
-
-  function TrustPoolEvent(uint _depositAmount, uint _payoutTime) {
+  function TrustPoolEvent(
+    uint _depositAmount,
+    uint _payoutTime,
+    bool _usePayoutTime
+  ) {
     depositAmount = _depositAmount;
     payoutTime = _payoutTime;
+    usePayoutTime = _usePayoutTime;
     organizer = msg.sender;
   }
 
@@ -38,6 +43,9 @@ contract TrustPoolEvent {
   function addAttendee() public payable {
     require(msg.value >= depositAmount);
     require(msg.sender != organizer);
+    if (usePayoutTime) {
+      require(now < payoutTime);
+    }
 
     //Ensure that the attendee is not yet registered
     require(!states[msg.sender].isRegistered);
@@ -58,7 +66,9 @@ contract TrustPoolEvent {
   }
 
   function triggerPayout() public returns (bool) {
-    require(now > payoutTime);
+    if (usePayoutTime) {
+      require(now > payoutTime);
+    }
     require(msg.sender == organizer);
 
     uint payoutAmt = this.balance / numAttended;
