@@ -1,4 +1,4 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.4.23;
 
 contract TrustPoolEvent {
   //NOTE: no way for Organizer to make money for now
@@ -10,7 +10,7 @@ contract TrustPoolEvent {
   }
 
   enum AttendeeState { PAID, ATTENDED }
-  
+
   address public organizer;
   uint public depositAmount;
   uint public payoutTime;
@@ -20,22 +20,22 @@ contract TrustPoolEvent {
   uint public numRegistered = 0;
   uint public numAttended = 0;
 
-  function TrustPoolEvent(
+  constructor(
     uint _depositAmount,
     uint _payoutTime,
     bool _usePayoutTime
-  ) {
+  ) public {
     depositAmount = _depositAmount;
     payoutTime = _payoutTime;
     usePayoutTime = _usePayoutTime;
     organizer = msg.sender;
   }
 
-  function isAttendeeRegistered(address attendee) public returns (bool) {
+  function isAttendeeRegistered(address attendee) public view returns (bool) {
     return states[attendee].isRegistered;
   }
 
-  function didAttend(address attendee) public returns (bool) {
+  function didAttend(address attendee) public view returns (bool) {
     return states[attendee].isRegistered
       && states[attendee].state == AttendeeState.ATTENDED;
   }
@@ -71,7 +71,7 @@ contract TrustPoolEvent {
     }
     require(msg.sender == organizer);
 
-    uint payoutAmt = this.balance / numAttended;
+    uint payoutAmt = address(this).balance / numAttended;
     for (uint i = 0; i < numRegistered; i++) {
       address attendee = attendeeIndex[i];
       if (states[attendee].state == AttendeeState.ATTENDED) {

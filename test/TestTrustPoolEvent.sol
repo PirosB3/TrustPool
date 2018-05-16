@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity ^0.4.23;
 
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
@@ -6,8 +6,8 @@ import "../contracts/TrustPoolEvent.sol";
 
 contract TestTrustPoolEvent{
 
-  function testInitialBalanceUsingDeployedContract() {
-    
+  function testInitialBalanceUsingDeployedContract() public {
+
     TrustPoolEvent tpEvent = new TrustPoolEvent(
       123 ether,
       1509230905,
@@ -19,7 +19,7 @@ contract TestTrustPoolEvent{
     Assert.equal(tpEvent.depositAmount(), expected, "The deposit amount should be initialized");
   }
 
-  function testAttendeeIsNotRegisteredByDefault() {
+  function testAttendeeIsNotRegisteredByDefault() public {
     TrustPoolEvent tpEvent = new TrustPoolEvent(
       123 ether,
       1509230905,
