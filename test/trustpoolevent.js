@@ -1,4 +1,4 @@
-const TrustPoolEvent = artifacts.require("./TrustPoolEvent.sol");
+const TrustPoolEvent = artifacts.require("TrustPoolEvent");
 
 contract('TrustPoolEvent', function(accounts) {
   it("should init deposit amount", async function () {
