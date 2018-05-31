@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import TrustPoolJson from '../build/contracts/TrustPoolEvent.json'
 import getWeb3 from './utils/getWeb3'
 
-import './css/oswald.css'
-import './css/open-sans.css'
 import './css/pure-min.css'
-import './App.css'
+import './app.css'
 
 class App extends Component {
   constructor(props) {

@@ -6,7 +6,7 @@ body,
 }
 
 h1, h2, h3 {
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-family: 'Arial Narrow', sans-serif;
 }
 
 code {
@@ -40,7 +40,7 @@ code {
   position: fixed;
   padding: 5px;
   background: #0c1a2b;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-family: 'Arial Narrow', sans-serif;
 }
 
 .navbar a {
